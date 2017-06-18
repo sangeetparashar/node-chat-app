@@ -12,16 +12,6 @@
 
 
     <script src="/socket.io/socket.io.js"></script> <!-- this is created to have all the socket.io methods loaded and have the methods available to you-->
-    <script>
-        var socket = io(); //this method is used to initiate the client connect to open up to the server . We need to store that in a variable
-        socket.on('connect', () => {
-            console.log('Connected to server');
-        });
-
-        socket.on('disconnect', () => {
-            console.log('Disconnected from the server');
-        });
-
-    </script>
+    <script src="/js/index.js"></script>
 </body>
 </html>
