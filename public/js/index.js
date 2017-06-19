@@ -13,10 +13,14 @@
             //    console.log('Disconnected from the server');
             //});
 
+
+            //the term broadcasting is something we'll look into now... IT IS A WAY OF EMITTING AN EVENT TO EVERYONE EXCEPT ONE PERSON
         });
         socket.on('newMessage', function (message) {
             console.log(JSON.stringify(message, undefined, 2));
         });
+
+
 socket.on('newEmail', function (result) { //the data that is emmitted is a data that can be the first argument in the callback
     console.log("New email.", JSON.stringify(result, undefined, 2));
 });

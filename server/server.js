@@ -14,6 +14,17 @@ var io = socketIO(server); //when you set up IO, you have an route that can acce
 io.on('connection', (socket) => { //this socket represents the individual socket rather than all the sockets on the website
     console.log(`New user connected!`);
 
+    socket.emit('newMessage', {
+        from: 'Admin',
+        text: 'Welcome to the chat app',
+        createAt: new Date().getTime()
+    });
+
+    socket.broadcast.emit('newMessage', {
+        from: 'Admin',
+        text: 'A new user has joined!',
+        createAt: new Date().getTime()
+    });
     //    socket.on('disconnect', () => {
     //        console.log("the client has disconnected! :( ");
     //    });
@@ -39,6 +50,16 @@ io.on('connection', (socket) => { //this socket represents the individual socket
             text: message.text,
             createAt: new Date().getTime()
         });
+
+
+        //in order to broadcast, lets look at what we have to do , 1) let the io know which individual socket we want to refrain emitting info to
+        //its the same syntax, except that it will emit this event to everyone but the socket that the message emits from
+        //socket.broadcast.emit('newMessage', {
+        //    from: message.from,
+        //    text: message.text,
+        //    createdAt: new Date().getTime()
+        //});
+        
     });
 
 });
