@@ -2,6 +2,7 @@ const path = require('path');
 const http = require('http');
 const express = require('express');
 const socketIO = require('socket.io');
+var { generateMessage } = require('./utils/message');
 
 const port = process.env.PORT || 3000;
 var app = express();
@@ -14,17 +15,9 @@ var io = socketIO(server); //when you set up IO, you have an route that can acce
 io.on('connection', (socket) => { //this socket represents the individual socket rather than all the sockets on the website
     console.log(`New user connected!`);
 
-    socket.emit('newMessage', {
-        from: 'Admin',
-        text: 'Welcome to the chat app',
-        createAt: new Date().getTime()
-    });
+    socket.emit('newMessage', generateMessage('Admin', 'Welcome to the chat app'));
 
-    socket.broadcast.emit('newMessage', {
-        from: 'Admin',
-        text: 'A new user has joined!',
-        createAt: new Date().getTime()
-    });
+    socket.broadcast.emit('newMessage', generateMessage('Admin', 'New user has joined the chat!'));
     //    socket.on('disconnect', () => {
     //        console.log("the client has disconnected! :( ");
     //    });
@@ -45,11 +38,7 @@ io.on('connection', (socket) => { //this socket represents the individual socket
    
     socket.on('createMessage', (message) => {
         console.log(JSON.stringify(message, undefined, 2));
-        io.emit('newMessage', {
-            from: message.from,
-            text: message.text,
-            createAt: new Date().getTime()
-        });
+        io.emit('newMessage', generateMessage(message.from,message.text));
 
 
         //in order to broadcast, lets look at what we have to do , 1) let the io know which individual socket we want to refrain emitting info to
