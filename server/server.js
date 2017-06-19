@@ -28,14 +28,17 @@ io.on('connection', (socket) => { //this socket represents the individual socket
     //    }); //by default we don't need to emit any data, the second argument is most commonly is your object that you want to sent
     //});
 
-    socket.emit('newMessage', {
-        from: 'Sangeet',
-        text: 'This is my chat app',
-        createAt:  Date.now()
-    });
 
+    // one massive difference between socket.emit and io.emit is that socket.emit does it to one connection while io emits it to EVERY single connection
+    
+   
     socket.on('createMessage', (message) => {
         console.log(JSON.stringify(message, undefined, 2));
+        io.emit('newMessage', {
+            from: message.from,
+            text: message.text,
+            createAt: new Date().getTime()
+        });
     });
 
 });

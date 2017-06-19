@@ -13,10 +13,6 @@
             //    console.log('Disconnected from the server');
             //});
 
-            socket.emit('createMessage', {
-                from: 'shay',
-                text: 'I would love if you could make your app work'
-            });
         });
         socket.on('newMessage', function (message) {
             console.log(JSON.stringify(message, undefined, 2));
