@@ -18,22 +18,37 @@
         });
         socket.on('newMessage', function (message) {
             var formattedTime = moment(message.createdAt).format('h:mm a');
-            console.log(JSON.stringify(message, undefined, 2));
+            var template = jQuery('#message-template').html();
+            var html = Mustache.render(template, {
+                text: message.text,
+                from: message.from,
+                createdAt: formattedTime
+            });
+            jQuery('#messages').append(html);
+            //console.log(JSON.stringify(message, undefined, 2));
 
-            var li = jQuery('<li></li>');
-            li.text(`${message.from} [${formattedTime}]: ${message.text}`);
+            //var li = jQuery('<li></li>');
+            //li.text(`${message.from} [${formattedTime}]: ${message.text}`);
 
-            jQuery('#messages').append(li);
+            //jQuery('#messages').append(li);
+        
         });
 
 socket.on('newLocationMessage', function (coords) {
-    var formattedTiem = moment(coords.createdAt).format('h:mm a');
-    var li = jQuery('<li></li>');
-    var a = jQuery('<a target="_blank">My current location<\a>') //the _blank tag tells the browser to open the link in a new tab, not the current tab
-    li.text(`${coords.from} [${formattedTiem}]: `);
-    a.attr('href', coords.url); //you can add and fetch to jQuery
-    li.append(a);
-    jQuery('#messages').append(li);
+    var formattedTime = moment(coords.createdAt).format('h:mm a');
+    var template = jQuery('#location-message-template').html();
+    var html = Mustache.render(template, {
+        url: coords.url,
+        from: coords.from,
+        createdAt: formattedTime
+    });
+    jQuery('#messages').append(html);
+    //var li = jQuery('<li></li>');
+    //var a = jQuery('<a target="_blank">My current location<\a>') //the _blank tag tells the browser to open the link in a new tab, not the current tab
+    //li.text(`${coords.from} [${formattedTiem}]: `);
+    //a.attr('href', coords.url); //you can add and fetch to jQuery
+    //li.append(a);
+    //jQuery('#messages').append(li);
 
 });
 //adding a third argument that is the acknowledgement!
@@ -48,7 +63,7 @@ socket.on('newLocationMessage', function (coords) {
                 messageTextbox.val('');
                 });
         });
-        var locationButton = jQuery('#send-location');
+var locationButton = jQuery('#send-location');
 locationButton.on('click', function () {
     if (!navigator.geolocation) {
         return alert('Geolocation not supported by your browser.');
