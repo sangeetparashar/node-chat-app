@@ -35,10 +35,11 @@ io.on('connection', (socket) => { //this socket represents the individual socket
 
     // one massive difference between socket.emit and io.emit is that socket.emit does it to one connection while io emits it to EVERY single connection
     
-   
-    socket.on('createMessage', (message) => {
+   //adding acknowledgements!
+    socket.on('createMessage', (message, callback) => {
         console.log(JSON.stringify(message, undefined, 2));
-        io.emit('newMessage', generateMessage(message.from,message.text));
+        io.emit('newMessage', generateMessage(message.from, message.text));
+        callback('this is from the server'); //we send data back by adding it in the callback 
 
 
         //in order to broadcast, lets look at what we have to do , 1) let the io know which individual socket we want to refrain emitting info to
