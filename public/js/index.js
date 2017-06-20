@@ -17,18 +17,20 @@
             //the term broadcasting is something we'll look into now... IT IS A WAY OF EMITTING AN EVENT TO EVERYONE EXCEPT ONE PERSON
         });
         socket.on('newMessage', function (message) {
+            var formattedTime = moment(message.createdAt).format('h:mm a');
             console.log(JSON.stringify(message, undefined, 2));
 
             var li = jQuery('<li></li>');
-            li.text(`${message.from}: ${message.text}`);
+            li.text(`${message.from} [${formattedTime}]: ${message.text}`);
 
             jQuery('#messages').append(li);
         });
 
 socket.on('newLocationMessage', function (coords) {
+    var formattedTiem = moment(coords.createdAt).format('h:mm a');
     var li = jQuery('<li></li>');
     var a = jQuery('<a target="_blank">My current location<\a>') //the _blank tag tells the browser to open the link in a new tab, not the current tab
-    li.text(`${coords.from}:`);
+    li.text(`${coords.from} [${formattedTiem}]: `);
     a.attr('href', coords.url); //you can add and fetch to jQuery
     li.append(a);
     jQuery('#messages').append(li);
