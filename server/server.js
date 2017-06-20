@@ -2,7 +2,7 @@ const path = require('path');
 const http = require('http');
 const express = require('express');
 const socketIO = require('socket.io');
-var { generateMessage } = require('./utils/message');
+var { generateMessage, generateLocationMessage } = require('./utils/message');
 
 const port = process.env.PORT || 3000;
 var app = express();
@@ -50,6 +50,11 @@ io.on('connection', (socket) => { //this socket represents the individual socket
         //    createdAt: new Date().getTime()
         //});
         
+    });
+
+    socket.on('createLocationMessage', (message) => {
+        console.log(JSON.stringify(message, undefined, 2));
+        io.emit('newLocationMessage', generateLocationMessage('Admin', message.latitude,message.longitude));
     });
 
 });

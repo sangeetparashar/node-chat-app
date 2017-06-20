@@ -24,6 +24,16 @@
 
             jQuery('#messages').append(li);
         });
+
+socket.on('newLocationMessage', function (coords) {
+    var li = jQuery('<li></li>');
+    var a = jQuery('<a target="_blank">My current location<\a>') //the _blank tag tells the browser to open the link in a new tab, not the current tab
+    li.text(`${coords.from}:`);
+    a.attr('href', coords.url); //you can add and fetch to jQuery
+    li.append(a);
+    jQuery('#messages').append(li);
+
+});
 //adding a third argument that is the acknowledgement!
         jQuery('#message-form').on('submit', function (e) {
             e.preventDefault();
@@ -34,6 +44,20 @@
 
                 });
         });
+        var locationButton = jQuery('#send-location');
+locationButton.on('click', function () {
+    if (!navigator.geolocation) {
+        return alert('Geolocation not supported by your browser.');
+    }
+    navigator.geolocation.getCurrentPosition(function (position) {
+        socket.emit('createLocationMessage', {
+            latitude: position.coords.latitude,
+            longitude: position.coords.longitude
+        });
+    }, function () {
+        alert('Unable to fetch location');
+        });
+});
 
 //socket.on('newEmail', function (result) { //the data that is emmitted is a data that can be the first argument in the callback
 //    console.log("New email.", JSON.stringify(result, undefined, 2));
