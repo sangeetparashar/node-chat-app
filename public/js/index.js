@@ -1,4 +1,21 @@
         var socket = io(); //this method is used to initiate the client connect to open up to the server . We need to store that in a variable
+        function scrollToBottom() {
+            //selectors
+            var messages = jQuery('#messages');
+            var newMessage = messages.children('li:last-child') //this lets you write a solution specific to the selector's children
+            //heights
+            var clientHeight = messages.prop('clientHeight');
+            var scrollTop = messages.prop('scrollTop');
+            var scrollHeight = messages.prop('scrollHeight');
+            var newMessageHeight = newMessage.innerHeight();
+            var lastMessageHeight = newMessage.prev().innerHeight(); //moves us to the previous child
+
+            if (clientHeight + scrollTop + newMessageHeight + lastMessageHeight >= scrollHeight) {
+                messages.scrollTop(scrollHeight);
+            };
+
+        };
+
         socket.on('connect', function () {
             console.log('Connected to server');
 
@@ -25,6 +42,8 @@
                 createdAt: formattedTime
             });
             jQuery('#messages').append(html);
+            scrollToBottom();
+
             //console.log(JSON.stringify(message, undefined, 2));
 
             //var li = jQuery('<li></li>');
@@ -33,6 +52,7 @@
             //jQuery('#messages').append(li);
         
         });
+
 
 socket.on('newLocationMessage', function (coords) {
     var formattedTime = moment(coords.createdAt).format('h:mm a');
@@ -43,6 +63,7 @@ socket.on('newLocationMessage', function (coords) {
         createdAt: formattedTime
     });
     jQuery('#messages').append(html);
+    scrollToBottom();
     //var li = jQuery('<li></li>');
     //var a = jQuery('<a target="_blank">My current location<\a>') //the _blank tag tells the browser to open the link in a new tab, not the current tab
     //li.text(`${coords.from} [${formattedTiem}]: `);
