@@ -7,6 +7,7 @@ The concept is to create a messaging app that eventually is completely private a
 and once the users leave the conversation, the data is erased or over written with blank data.
 
 Currently: Rooms are not case sensitive, multiple users can enter with the same name and the conversations are open to everyone
+
           Current Stack: NodeJS, Express, MustacheJS and basic HTML, CSS5
 
 Future Implementation: fix the bugs and improve security, add a database and bcrypt passwords for rooms
