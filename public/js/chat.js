@@ -18,6 +18,16 @@
 
         socket.on('connect', function () {
             console.log('Connected to server');
+            var params = jQuery.deparam(window.location.search);
+            socket.emit('join', params, function (error) {
+                if (error) {
+                    alert(error);
+                    window.location.href = '/';
+                } else {
+                    console.log("no error");
+
+                }
+                });
 
             //    socket.emit('creatEmail', {
             //        to: 'shay@gmail.com',
@@ -26,9 +36,19 @@
             //    });
             //});
 
-            //socket.on('disconnect', function() {
-            //    console.log('Disconnected from the server');
-            //});
+            socket.on('disconnect', function () {
+                console.log('Disconnected from the server');
+            });
+
+            socket.on('updateUserList', function (users) {
+                var ol = jQuery('<ol></ol>');
+
+                users.forEach(function (user) {
+                    ol.append(jQuery('<li></li>').text(user));
+                });
+
+                jQuery('#users').html(ol);
+            });
 
 
             //the term broadcasting is something we'll look into now... IT IS A WAY OF EMITTING AN EVENT TO EVERYONE EXCEPT ONE PERSON
