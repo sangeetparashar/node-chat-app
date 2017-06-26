@@ -62,8 +62,10 @@ io.on('connection', (socket) => { //this socket represents the individual socket
 
    //adding acknowledgements!
     socket.on('createMessage', (message, callback) => {
-        console.log(JSON.stringify(message, undefined, 2));
-        io.emit('newMessage', generateMessage(message.from, message.text));
+        var user = users.getUser(socket.id);
+        if (user && isRealString(message.text)) {
+            io.to(user.room).emit('newMessage', generateMessage(user.name, message.text));
+        };
         callback(); //we send data back by adding it in the callback 
 
 
@@ -78,7 +80,10 @@ io.on('connection', (socket) => { //this socket represents the individual socket
     });
 
     socket.on('createLocationMessage', (message) => {
-        io.emit('newLocationMessage', generateLocationMessage('Admin', message.latitude,message.longitude));
+        var user = users.getUser(socket.id);
+        if (user) {
+            io.to(user.room).emit('newLocationMessage', generateLocationMessage(user.name, message.latitude, message.longitude));
+        }
     });
     socket.on('disconnect', () => {
         var user = users.removeUser(socket.id);
